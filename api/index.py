@@ -2,7 +2,14 @@ from pathlib import Path
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse
 
-from lib.rembg_api import APIError, handle_remove, send_error_json, send_json, send_options
+from lib.rembg_api import (
+    APIError,
+    get_model_metadata,
+    handle_remove,
+    send_error_json,
+    send_json,
+    send_options,
+)
 
 STATIC_FILES = {
     "/": ("index.html", "text/html; charset=utf-8"),
@@ -35,6 +42,10 @@ class handler(BaseHTTPRequestHandler):
             send_json(self, 200, {"status": "ok"})
             return
 
+        if path in {"/model", "/api/model"}:
+            send_json(self, 200, get_model_metadata())
+            return
+
         if path.endswith("/remove"):
             self._remove_background()
             return
@@ -48,6 +59,8 @@ class handler(BaseHTTPRequestHandler):
                 "source": "https://github.com/danielgatis/rembg",
                 "endpoints": {
                     "GET /api/health": "Health check",
+                    "GET /model": "Model metadata and supported options",
+                    "GET /api/model": "Model metadata and supported options",
                     "POST /api/remove": "Remove a background from multipart, JSON/base64, URL encoded, or raw image input",
                     "GET /api/remove?url=https://example.com/image.jpg": "Remove a background from a remote image URL",
                 },

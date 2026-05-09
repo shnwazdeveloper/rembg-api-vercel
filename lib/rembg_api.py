@@ -23,6 +23,40 @@ ALLOWED_MODELS = {
 }
 
 _SESSIONS: dict[str, Any] = {}
+MODEL_DESCRIPTIONS = {
+    "u2netp": "Lightweight general background removal model. This is the default for faster serverless cold starts.",
+    "silueta": "Compact general background removal model with stronger edges than u2netp in some images.",
+}
+
+
+def get_model_metadata() -> dict[str, Any]:
+    models = []
+    for model in sorted(ALLOWED_MODELS):
+        models.append(
+            {
+                "name": model,
+                "default": model == DEFAULT_MODEL,
+                "description": MODEL_DESCRIPTIONS.get(
+                    model, "Allowed rembg model for this deployment."
+                ),
+            }
+        )
+
+    return {
+        "default_model": DEFAULT_MODEL,
+        "allowed_models": sorted(ALLOWED_MODELS),
+        "models": models,
+        "options": {
+            "model": "u2netp or silueta",
+            "alpha_matting": "true or false",
+            "only_mask": "true or false",
+            "post_process_mask": "true or false",
+        },
+        "usage": {
+            "metadata": "GET /model or GET /api/model",
+            "remove": "POST /api/remove with model=<name> to choose a model",
+        },
+    }
 
 
 class APIError(Exception):

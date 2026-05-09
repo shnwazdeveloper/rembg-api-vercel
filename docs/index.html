@@ -56,6 +56,11 @@
               <p>Returns service health.</p>
             </div>
             <div class="endpoint-row">
+              <span class="method get">GET</span>
+              <code>/model</code>
+              <p>Returns the default model, allowed models, model descriptions, and supported options.</p>
+            </div>
+            <div class="endpoint-row">
               <span class="method post">POST</span>
               <code>/api/remove</code>
               <p>Removes the image background from upload, JSON, form, or raw bytes.</p>
@@ -89,6 +94,9 @@
   -d '{"image_base64":"data:image/png;base64,..."}' \
   https://rembg-api-vercel.vercel.app/api/remove \
   -o output.png</code></pre>
+
+          <h3>Model metadata</h3>
+          <pre><code>curl -s https://rembg-api-vercel.vercel.app/model</code></pre>
 
           <h3>Raw bytes</h3>
           <pre><code>curl -s \

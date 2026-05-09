@@ -8,6 +8,8 @@ The API is built for Vercel Python Functions and defaults to the lightweight `u2
 
 - `GET /api` - usage and endpoint metadata
 - `GET /api/health` - health check
+- `GET /model` - model metadata and supported options
+- `GET /api/model` - model metadata and supported options
 - `POST /api/remove` - remove an image background
 - `GET /api/remove?url=https://example.com/input.jpg` - remove a background from a remote image URL
 
@@ -57,6 +59,14 @@ Pass these as multipart fields, JSON keys, form fields, or query parameters:
 - `alpha_matting`: `true` or `false`
 - `only_mask`: `true` or `false`
 - `post_process_mask`: `true` or `false`
+
+## Model metadata
+
+```bash
+curl -s https://YOUR_PROJECT.vercel.app/model
+```
+
+This returns the default model, allowed models, model descriptions, and supported processing options.
 
 ## Environment variables
 
