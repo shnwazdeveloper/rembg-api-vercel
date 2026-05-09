@@ -4,6 +4,12 @@ Serverless background removal API powered by [`danielgatis/rembg`](https://githu
 
 The API is built for Vercel Python Functions and defaults to the lightweight `u2netp` model so cold starts and model downloads stay practical for serverless hosting.
 
+## Live
+
+- Website: https://shnwazdev-rembgapi.vercel.app
+- Docs: https://shnwazdev-rembgapi.vercel.app/docs/
+- Model metadata: https://shnwazdev-rembgapi.vercel.app/model
+
 ## Endpoints
 
 - `GET /api` - usage and endpoint metadata
@@ -16,7 +22,7 @@ The API is built for Vercel Python Functions and defaults to the lightweight `u2
 ## Upload an image
 
 ```bash
-curl -s -F file=@input.jpg https://YOUR_PROJECT.vercel.app/api/remove -o output.png
+curl -s -F file=@input.jpg https://shnwazdev-rembgapi.vercel.app/api/remove -o output.png
 ```
 
 ## Send a base64 image
@@ -25,7 +31,7 @@ curl -s -F file=@input.jpg https://YOUR_PROJECT.vercel.app/api/remove -o output.
 curl -s \
   -H "Content-Type: application/json" \
   -d '{"image_base64":"data:image/png;base64,...."}' \
-  https://YOUR_PROJECT.vercel.app/api/remove \
+  https://shnwazdev-rembgapi.vercel.app/api/remove \
   -o output.png
 ```
 
@@ -35,7 +41,7 @@ curl -s \
 curl -s \
   -H "Content-Type: application/json" \
   -d '{"url":"https://example.com/input.jpg"}' \
-  https://YOUR_PROJECT.vercel.app/api/remove \
+  https://shnwazdev-rembgapi.vercel.app/api/remove \
   -o output.png
 ```
 
@@ -47,7 +53,7 @@ For `GET /api/remove?url=...`, URL-encode the image URL if it contains `?`, `&`,
 curl -s \
   -H "Content-Type: image/png" \
   --data-binary @input.png \
-  https://YOUR_PROJECT.vercel.app/api/remove \
+  https://shnwazdev-rembgapi.vercel.app/api/remove \
   -o output.png
 ```
 
@@ -63,7 +69,7 @@ Pass these as multipart fields, JSON keys, form fields, or query parameters:
 ## Model metadata
 
 ```bash
-curl -s https://YOUR_PROJECT.vercel.app/model
+curl -s https://shnwazdev-rembgapi.vercel.app/model
 ```
 
 This returns the default model, allowed models, model descriptions, and supported processing options.
@@ -83,3 +89,7 @@ Models are cached in `/tmp/rembg-models` during warm function reuse.
 npx vercel@latest
 npx vercel@latest --prod
 ```
+
+## License
+
+MIT
