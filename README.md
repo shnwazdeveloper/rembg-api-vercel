@@ -1,4 +1,4 @@
-# rembg API for Vercel
+# shnwazdev-rembgapi
 
 Serverless background removal API powered by [`danielgatis/rembg`](https://github.com/danielgatis/rembg).
 

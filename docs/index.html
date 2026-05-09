@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta
       name="description"
-      content="API reference for rembg-api-vercel background removal endpoints."
+      content="API reference for shnwazdev-rembgapi background removal endpoints."
     >
     <title>Docs - rembg API for Vercel</title>
     <link rel="stylesheet" href="../styles.css">
@@ -19,7 +19,7 @@
       <nav class="nav-links" aria-label="Primary navigation">
         <a aria-current="page" href="/docs/">Docs</a>
         <a href="/api/health">Status</a>
-        <a href="https://github.com/shnwazdeveloper/rembg-api-vercel">GitHub</a>
+        <a href="https://github.com/shnwazdeveloper/shnwazdev-rembgapi">GitHub</a>
       </nav>
     </header>
 
@@ -43,7 +43,7 @@
           </p>
           <div class="endpoint-callout">
             <span>Base URL</span>
-            <code>https://rembg-api-vercel.vercel.app</code>
+            <code>https://shnwazdev-rembgapi.vercel.app</code>
           </div>
         </section>
 
@@ -78,31 +78,31 @@
 
           <h3>Multipart upload</h3>
           <pre><code>curl -s -F file=@input.jpg \
-  https://rembg-api-vercel.vercel.app/api/remove \
+  https://shnwazdev-rembgapi.vercel.app/api/remove \
   -o output.png</code></pre>
 
           <h3>JSON image URL</h3>
           <pre><code>curl -s \
   -H "Content-Type: application/json" \
   -d '{"url":"https://example.com/input.jpg"}' \
-  https://rembg-api-vercel.vercel.app/api/remove \
+  https://shnwazdev-rembgapi.vercel.app/api/remove \
   -o output.png</code></pre>
 
           <h3>JSON base64</h3>
           <pre><code>curl -s \
   -H "Content-Type: application/json" \
   -d '{"image_base64":"data:image/png;base64,..."}' \
-  https://rembg-api-vercel.vercel.app/api/remove \
+  https://shnwazdev-rembgapi.vercel.app/api/remove \
   -o output.png</code></pre>
 
           <h3>Model metadata</h3>
-          <pre><code>curl -s https://rembg-api-vercel.vercel.app/model</code></pre>
+          <pre><code>curl -s https://shnwazdev-rembgapi.vercel.app/model</code></pre>
 
           <h3>Raw bytes</h3>
           <pre><code>curl -s \
   -H "Content-Type: image/png" \
   --data-binary @input.png \
-  https://rembg-api-vercel.vercel.app/api/remove \
+  https://shnwazdev-rembgapi.vercel.app/api/remove \
   -o output.png</code></pre>
         </section>
 

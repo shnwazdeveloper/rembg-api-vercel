@@ -238,7 +238,7 @@ def _parse_multipart(content_type: str, body: bytes) -> tuple[bytes, dict[str, A
 def _download_image(url: str) -> bytes:
     _validate_public_url(url)
     opener = build_opener(_SafeRedirectHandler)
-    request = Request(url, headers={"User-Agent": "rembg-api-vercel/1.0"})
+    request = Request(url, headers={"User-Agent": "shnwazdev-rembgapi/1.0"})
 
     try:
         with opener.open(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:

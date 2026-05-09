@@ -54,7 +54,7 @@ class handler(BaseHTTPRequestHandler):
             self,
             200,
             {
-                "name": "rembg-api-vercel",
+                "name": "shnwazdev-rembgapi",
                 "status": "ok",
                 "source": "https://github.com/danielgatis/rembg",
                 "endpoints": {
@@ -64,7 +64,7 @@ class handler(BaseHTTPRequestHandler):
                     "POST /api/remove": "Remove a background from multipart, JSON/base64, URL encoded, or raw image input",
                     "GET /api/remove?url=https://example.com/image.jpg": "Remove a background from a remote image URL",
                 },
-                "multipart_example": "curl -s -F file=@input.jpg https://your-domain.vercel.app/api/remove -o output.png",
+                "multipart_example": "curl -s -F file=@input.jpg https://shnwazdev-rembgapi.vercel.app/api/remove -o output.png",
                 "json_example": {
                     "method": "POST",
                     "path": "/api/remove",
