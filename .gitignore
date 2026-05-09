@@ -1,0 +1,15 @@
+.vercel
+.env*
+!.env.example
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+tmp/
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.log
