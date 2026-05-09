@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="API reference for rembg-api-vercel background removal endpoints."
+    >
+    <title>Docs - rembg API for Vercel</title>
+    <link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="rembg API home">
+        <span class="brand-mark" aria-hidden="true">rb</span>
+        <span>rembg API</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a aria-current="page" href="/docs/">Docs</a>
+        <a href="/api/health">Status</a>
+        <a href="https://github.com/shnwazdeveloper/rembg-api-vercel">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="docs-layout">
+      <aside class="docs-sidebar" aria-label="Docs sections">
+        <a href="#overview">Overview</a>
+        <a href="#endpoints">Endpoints</a>
+        <a href="#request-formats">Request formats</a>
+        <a href="#options">Options</a>
+        <a href="#errors">Errors</a>
+        <a href="#limits">Limits</a>
+      </aside>
+
+      <article class="docs-content">
+        <section id="overview" class="doc-section">
+          <p class="eyebrow">API reference</p>
+          <h1>Background removal API</h1>
+          <p class="lead">
+            The service accepts an image, processes it through rembg, and returns
+            a PNG with transparency. Authentication is not required.
+          </p>
+          <div class="endpoint-callout">
+            <span>Base URL</span>
+            <code>https://rembg-api-vercel.vercel.app</code>
+          </div>
+        </section>
+
+        <section id="endpoints" class="doc-section">
+          <h2>Endpoints</h2>
+          <div class="endpoint-list">
+            <div class="endpoint-row">
+              <span class="method get">GET</span>
+              <code>/api/health</code>
+              <p>Returns service health.</p>
+            </div>
+            <div class="endpoint-row">
+              <span class="method post">POST</span>
+              <code>/api/remove</code>
+              <p>Removes the image background from upload, JSON, form, or raw bytes.</p>
+            </div>
+            <div class="endpoint-row">
+              <span class="method get">GET</span>
+              <code>/api/remove?url=https://example.com/image.jpg</code>
+              <p>Downloads a public image URL and returns the processed PNG.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="request-formats" class="doc-section">
+          <h2>Request formats</h2>
+
+          <h3>Multipart upload</h3>
+          <pre><code>curl -s -F file=@input.jpg \
+  https://rembg-api-vercel.vercel.app/api/remove \
+  -o output.png</code></pre>
+
+          <h3>JSON image URL</h3>
+          <pre><code>curl -s \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com/input.jpg"}' \
+  https://rembg-api-vercel.vercel.app/api/remove \
+  -o output.png</code></pre>
+
+          <h3>JSON base64</h3>
+          <pre><code>curl -s \
+  -H "Content-Type: application/json" \
+  -d '{"image_base64":"data:image/png;base64,..."}' \
+  https://rembg-api-vercel.vercel.app/api/remove \
+  -o output.png</code></pre>
+
+          <h3>Raw bytes</h3>
+          <pre><code>curl -s \
+  -H "Content-Type: image/png" \
+  --data-binary @input.png \
+  https://rembg-api-vercel.vercel.app/api/remove \
+  -o output.png</code></pre>
+        </section>
+
+        <section id="options" class="doc-section">
+          <h2>Options</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Values</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>model</code></td>
+                  <td><code>u2netp</code>, <code>silueta</code></td>
+                  <td><code>u2netp</code></td>
+                </tr>
+                <tr>
+                  <td><code>alpha_matting</code></td>
+                  <td><code>true</code>, <code>false</code></td>
+                  <td><code>false</code></td>
+                </tr>
+                <tr>
+                  <td><code>only_mask</code></td>
+                  <td><code>true</code>, <code>false</code></td>
+                  <td><code>false</code></td>
+                </tr>
+                <tr>
+                  <td><code>post_process_mask</code></td>
+                  <td><code>true</code>, <code>false</code></td>
+                  <td><code>false</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="errors" class="doc-section">
+          <h2>Errors</h2>
+          <div class="error-grid">
+            <div>
+              <strong>400</strong>
+              <p>Missing image input, invalid URL, blocked private host, invalid base64, or unsupported model.</p>
+            </div>
+            <div>
+              <strong>413</strong>
+              <p>The image or request body is larger than the configured limit.</p>
+            </div>
+            <div>
+              <strong>415</strong>
+              <p>The request content type is unsupported or a remote URL did not return an image.</p>
+            </div>
+            <div>
+              <strong>502/504</strong>
+              <p>The remote image could not be downloaded or timed out.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="limits" class="doc-section">
+          <h2>Limits and notes</h2>
+          <ul class="doc-list">
+            <li>Default max image size is <code>8 MB</code>.</li>
+            <li>Remote URLs must be public and return an <code>image/*</code> content type.</li>
+            <li>Private, loopback, link-local, multicast, reserved, and unspecified hosts are blocked.</li>
+            <li>Cold starts can take longer because Vercel installs heavy ML dependencies at runtime.</li>
+            <li>Warm function reuse is much faster because the model session and files are cached.</li>
+          </ul>
+        </section>
+      </article>
+    </main>
+  </body>
+</html>

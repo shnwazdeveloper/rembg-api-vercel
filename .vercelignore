@@ -4,8 +4,5 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 tmp/
-*.png
-*.jpg
-*.jpeg
-*.webp
+verification-output*.png
 *.log

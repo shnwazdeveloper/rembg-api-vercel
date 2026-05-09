@@ -8,8 +8,5 @@ __pycache__/
 .venv/
 venv/
 tmp/
-*.png
-*.jpg
-*.jpeg
-*.webp
+verification-output*.png
 *.log

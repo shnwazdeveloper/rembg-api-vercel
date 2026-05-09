@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Documentation landing page for a Vercel-hosted rembg background removal API."
+    >
+    <title>rembg API for Vercel</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="rembg API home">
+        <span class="brand-mark" aria-hidden="true">rb</span>
+        <span>rembg API</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="/docs/">Docs</a>
+        <a href="/api/health">Status</a>
+        <a href="https://github.com/shnwazdeveloper/rembg-api-vercel">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-visual" aria-hidden="true">
+          <img class="hero-before" src="assets/sample-before.jpg" alt="">
+          <div class="hero-after-wrap">
+            <img class="hero-after" src="assets/sample-after.png" alt="">
+          </div>
+          <span class="scan-line"></span>
+        </div>
+
+        <div class="hero-content">
+          <p class="eyebrow">Python function on Vercel</p>
+          <h1>rembg-api-vercel</h1>
+          <p class="hero-copy">
+            A small production-ready API for removing image backgrounds with
+            rembg, built for upload, base64, raw bytes, and remote image URLs.
+          </p>
+          <div class="button-row" aria-label="Primary actions">
+            <a class="button primary" href="/docs/">Read docs</a>
+            <a class="button secondary" href="/api/health">Check health</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="status-band" aria-label="Service summary">
+        <div>
+          <span class="meta-label">Live endpoint</span>
+          <strong>https://rembg-api-vercel.vercel.app/api/remove</strong>
+        </div>
+        <div>
+          <span class="meta-label">Default model</span>
+          <strong>u2netp</strong>
+        </div>
+        <div>
+          <span class="meta-label">Warm request</span>
+          <strong>about 3 seconds</strong>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
+          <p class="eyebrow">Quick start</p>
+          <h2>Send an image, receive a transparent PNG.</h2>
+        </div>
+        <div class="command-panel">
+          <div class="terminal-top" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <pre><code>curl -s -F file=@input.jpg \
+  https://rembg-api-vercel.vercel.app/api/remove \
+  -o output.png</code></pre>
+        </div>
+      </section>
+
+      <section class="feature-grid" aria-label="API capabilities">
+        <article class="feature-card">
+          <span class="number">01</span>
+          <h3>Multiple input paths</h3>
+          <p>Use multipart uploads, JSON base64, form URLs, or raw image bytes.</p>
+        </article>
+        <article class="feature-card">
+          <span class="number">02</span>
+          <h3>Clear client errors</h3>
+          <p>Bad URLs, private hosts, non-image responses, and size issues return JSON errors.</p>
+        </article>
+        <article class="feature-card">
+          <span class="number">03</span>
+          <h3>Serverless defaults</h3>
+          <p>Uses the lightweight model by default and caches model files during warm reuse.</p>
+        </article>
+      </section>
+
+      <section class="motion-strip" aria-label="Request lifecycle">
+        <div class="motion-track">
+          <span>upload</span>
+          <span>validate</span>
+          <span>remove</span>
+          <span>png</span>
+        </div>
+      </section>
+
+      <section class="cta-band">
+        <div>
+          <p class="eyebrow">Reference</p>
+          <h2>Everything needed for integration lives on the docs page.</h2>
+        </div>
+        <a class="button primary" href="/docs/">Open API docs</a>
+      </section>
+    </main>
+  </body>
+</html>
