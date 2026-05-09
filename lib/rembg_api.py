@@ -8,6 +8,7 @@ from email.parser import BytesParser
 from email.policy import default
 from http.server import BaseHTTPRequestHandler
 from typing import Any
+from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, urlparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
@@ -205,15 +206,31 @@ def _download_image(url: str) -> bytes:
     opener = build_opener(_SafeRedirectHandler)
     request = Request(url, headers={"User-Agent": "rembg-api-vercel/1.0"})
 
-    with opener.open(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
-        content_type = response.headers.get("Content-Type", "")
-        if not content_type.startswith("image/"):
-            raise APIError(415, f"URL did not return an image. Content-Type: {content_type}")
+    try:
+        with opener.open(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
+            content_type = response.headers.get("Content-Type", "")
+            if not content_type.startswith("image/"):
+                raise APIError(
+                    415, f"URL did not return an image. Content-Type: {content_type}"
+                )
 
-        data = response.read(MAX_IMAGE_BYTES + 1)
-        if len(data) > MAX_IMAGE_BYTES:
-            raise APIError(413, f"Remote image is larger than {MAX_IMAGE_BYTES} bytes.")
-        return data
+            data = response.read(MAX_IMAGE_BYTES + 1)
+            if len(data) > MAX_IMAGE_BYTES:
+                raise APIError(
+                    413, f"Remote image is larger than {MAX_IMAGE_BYTES} bytes."
+                )
+            return data
+    except HTTPError as exc:
+        status = 400 if 400 <= exc.code < 500 else 502
+        reason = str(exc.reason or "Unknown error")
+        raise APIError(
+            status,
+            f"Image URL returned HTTP {exc.code} {reason}. Check that the URL is public and points directly to an image.",
+        ) from exc
+    except TimeoutError as exc:
+        raise APIError(504, "Timed out while downloading the image URL.") from exc
+    except URLError as exc:
+        raise APIError(502, f"Could not download image URL: {exc.reason}") from exc
 
 
 def _validate_public_url(url: str) -> None:

@@ -27,6 +27,18 @@ curl -s \
   -o output.png
 ```
 
+## Send an image URL
+
+```bash
+curl -s \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com/input.jpg"}' \
+  https://YOUR_PROJECT.vercel.app/api/remove \
+  -o output.png
+```
+
+For `GET /api/remove?url=...`, URL-encode the image URL if it contains `?`, `&`, spaces, or other special characters. The URL must be public and must return an `image/*` content type.
+
 ## Send raw image bytes
 
 ```bash
