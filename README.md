@@ -78,7 +78,7 @@ This returns the default model, allowed models, model descriptions, and supporte
 
 - `REMBG_MODEL`: default model, defaults to `u2netp`
 - `ALLOWED_MODELS`: comma-separated allowed models, defaults to `u2netp,silueta`
-- `MAX_IMAGE_BYTES`: max input image bytes, defaults to `8388608`
+- `MAX_IMAGE_BYTES`: optional app-side max input image bytes; defaults to `0` which disables the app limit
 - `REQUEST_TIMEOUT_SECONDS`: remote image download timeout, defaults to `15`
 
 Models are cached in `/tmp/rembg-models` during warm function reuse.

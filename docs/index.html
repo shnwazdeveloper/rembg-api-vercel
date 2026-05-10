@@ -97,6 +97,9 @@
 
           <h3>Model metadata</h3>
           <pre><code>curl -s https://shnwazdev-rembgapi.vercel.app/model</code></pre>
+          <p class="doc-note">
+            The metadata response includes whether an app-side size cap is enabled.
+          </p>
 
           <h3>Raw bytes</h3>
           <pre><code>curl -s \
@@ -152,7 +155,7 @@
             </div>
             <div>
               <strong>413</strong>
-              <p>The image or request body is larger than the configured limit.</p>
+              <p>The hosting platform rejected the request before the app could process it.</p>
             </div>
             <div>
               <strong>415</strong>
@@ -168,9 +171,10 @@
         <section id="limits" class="doc-section">
           <h2>Limits and notes</h2>
           <ul class="doc-list">
-            <li>Default max image size is <code>8 MB</code>.</li>
+            <li>There is no app-side image size cap by default.</li>
             <li>Remote URLs must be public and return an <code>image/*</code> content type.</li>
             <li>Private, loopback, link-local, multicast, reserved, and unspecified hosts are blocked.</li>
+            <li>Vercel platform request, memory, and runtime limits can still apply.</li>
             <li>Cold starts can take longer because Vercel installs heavy ML dependencies at runtime.</li>
             <li>Warm function reuse is much faster because the model session and files are cached.</li>
           </ul>

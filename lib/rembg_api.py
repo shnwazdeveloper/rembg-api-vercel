@@ -13,7 +13,7 @@ from urllib.parse import parse_qs, urlparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 
-MAX_IMAGE_BYTES = int(os.getenv("MAX_IMAGE_BYTES", str(8 * 1024 * 1024)))
+MAX_IMAGE_BYTES = int(os.getenv("MAX_IMAGE_BYTES", "0") or "0")
 REQUEST_TIMEOUT_SECONDS = int(os.getenv("REQUEST_TIMEOUT_SECONDS", "15"))
 DEFAULT_MODEL = os.getenv("REMBG_MODEL", "u2netp")
 ALLOWED_MODELS = {
@@ -51,6 +51,11 @@ def get_model_metadata() -> dict[str, Any]:
             "alpha_matting": "true or false",
             "only_mask": "true or false",
             "post_process_mask": "true or false",
+        },
+        "limits": {
+            "app_size_limit_bytes": MAX_IMAGE_BYTES if _has_app_size_limit() else None,
+            "app_size_limit_enabled": _has_app_size_limit(),
+            "note": "No app-side image size cap is enabled by default. Hosting platform limits may still apply.",
         },
         "usage": {
             "metadata": "GET /model or GET /api/model",
@@ -113,7 +118,7 @@ def handle_remove(handler: BaseHTTPRequestHandler) -> None:
 def remove_background(image_bytes: bytes, options: dict[str, Any]) -> bytes:
     if not image_bytes:
         raise APIError(400, "No image data received.")
-    if len(image_bytes) > MAX_IMAGE_BYTES:
+    if _has_app_size_limit() and len(image_bytes) > MAX_IMAGE_BYTES:
         raise APIError(413, f"Image is larger than {MAX_IMAGE_BYTES} bytes.")
 
     model = str(options.get("model") or DEFAULT_MODEL).strip()
@@ -159,7 +164,7 @@ def _extract_request(handler: BaseHTTPRequestHandler) -> tuple[bytes, dict[str, 
     content_length = int(handler.headers.get("Content-Length", "0") or "0")
     if content_length <= 0:
         raise APIError(400, "Request body is empty.")
-    if content_length > MAX_IMAGE_BYTES * 2:
+    if _has_app_size_limit() and content_length > MAX_IMAGE_BYTES * 2:
         raise APIError(413, "Request body is too large.")
 
     content_type = handler.headers.get("Content-Type", "")
@@ -248,8 +253,9 @@ def _download_image(url: str) -> bytes:
                     415, f"URL did not return an image. Content-Type: {content_type}"
                 )
 
-            data = response.read(MAX_IMAGE_BYTES + 1)
-            if len(data) > MAX_IMAGE_BYTES:
+            read_size = MAX_IMAGE_BYTES + 1 if _has_app_size_limit() else -1
+            data = response.read(read_size)
+            if _has_app_size_limit() and len(data) > MAX_IMAGE_BYTES:
                 raise APIError(
                     413, f"Remote image is larger than {MAX_IMAGE_BYTES} bytes."
                 )
@@ -311,6 +317,10 @@ def _as_bool(value: Any) -> bool:
     if value is None:
         return False
     return str(value).strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _has_app_size_limit() -> bool:
+    return MAX_IMAGE_BYTES > 0
 
 
 def _send_cors_headers(handler: BaseHTTPRequestHandler) -> None:
